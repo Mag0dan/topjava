@@ -9,7 +9,7 @@
 <hr>
 <h2>Meals</h2>
 <a href="meals?action=add">Add Meal</a>
-<table>
+<table border="1" cellpadding="8" cellspacing="0">
     <tr>
         <th>Дата</th>
         <th>Описание</th>

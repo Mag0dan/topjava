@@ -9,7 +9,7 @@
     <input type="hidden" name="id" value="${meal.id}">
     <h3>Время:</h3>
     <dl>
-        <input type="datetime-local" name="dateTime" value="${meal.dateTime}">
+        <input type="datetime-local" name="dateTime" value="${meal.dateTime}" required>
     </dl>
     <h3>Описание:</h3>
     <dl>
