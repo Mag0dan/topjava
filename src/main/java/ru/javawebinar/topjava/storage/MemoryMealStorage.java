@@ -8,7 +8,7 @@ import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicInteger;
 
-public class MemoryIdMealStorage implements Storage<Integer, Meal> {
+public class MemoryMealStorage implements Storage<Integer, Meal> {
     private final Map<Integer, Meal> storage = new ConcurrentHashMap<>();
     private final AtomicInteger nextId = new AtomicInteger(1);
 
@@ -17,7 +17,8 @@ public class MemoryIdMealStorage implements Storage<Integer, Meal> {
         if(meal.getId() == null || !storage.containsKey(meal.getId())) {
             meal.setId(nextId.getAndIncrement());
         }
-        return storage.put(meal.getId(), meal);
+        storage.put(meal.getId(), meal);
+        return meal;
     }
 
     @Override

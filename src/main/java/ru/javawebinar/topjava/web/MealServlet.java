@@ -2,7 +2,7 @@ package ru.javawebinar.topjava.web;
 
 import org.slf4j.Logger;
 import ru.javawebinar.topjava.model.Meal;
-import ru.javawebinar.topjava.storage.MemoryIdMealStorage;
+import ru.javawebinar.topjava.storage.MemoryMealStorage;
 import ru.javawebinar.topjava.storage.Storage;
 import ru.javawebinar.topjava.util.MealsUtil;
 
@@ -13,20 +13,29 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
+import java.time.Month;
 import java.time.format.DateTimeFormatter;
+import java.util.Arrays;
 
 import static org.slf4j.LoggerFactory.getLogger;
 
 public class MealServlet extends HttpServlet {
 
-    private static final Storage<Integer, Meal> storage = new MemoryIdMealStorage();
+    private static final Storage<Integer, Meal> storage = new MemoryMealStorage();
     private static final Logger log = getLogger(MealServlet.class);
-    private static final DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm:ss");
+    private static final DateTimeFormatter DATE_TIME_FORMATTER = DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm:ss");
 
     @Override
     public void init() throws ServletException {
-        super.init();
-        MealsUtil.fillStorage(storage);
+        Arrays.asList(
+                new Meal(LocalDateTime.of(2020, Month.JANUARY, 30, 10, 0), "Завтрак", 500),
+                new Meal(LocalDateTime.of(2020, Month.JANUARY, 30, 13, 0), "Обед", 1000),
+                new Meal(LocalDateTime.of(2020, Month.JANUARY, 30, 20, 0), "Ужин", 500),
+                new Meal(LocalDateTime.of(2020, Month.JANUARY, 31, 0, 0), "Еда на граничное значение", 100),
+                new Meal(LocalDateTime.of(2020, Month.JANUARY, 31, 10, 0), "Завтрак", 1000),
+                new Meal(LocalDateTime.of(2020, Month.JANUARY, 31, 13, 0), "Обед", 500),
+                new Meal(LocalDateTime.of(2020, Month.JANUARY, 31, 20, 0), "Ужин", 420))
+                .forEach(storage::save);
     }
 
     @Override
@@ -40,7 +49,7 @@ public class MealServlet extends HttpServlet {
         String paramCalories = request.getParameter("calories");
 
         final boolean isCreate = id == null || id.isEmpty();
-        final int calories = paramCalories.isEmpty() ? 0 : Integer.parseInt(paramCalories);
+        final int calories = Integer.parseInt(paramCalories);
         Meal meal;
 
         if (isCreate) {
@@ -63,7 +72,7 @@ public class MealServlet extends HttpServlet {
             log.debug("action null");
             log.debug("redirect to meals");
             request.setAttribute("meals", MealsUtil.filteredByStreams(storage.getAll(), LocalTime.MIN, LocalTime.MAX, MealsUtil.CALORIES_PER_DAY));
-            request.setAttribute("formatter", dateTimeFormatter);
+            request.setAttribute("formatter", DATE_TIME_FORMATTER);
             request.getRequestDispatcher("/meals.jsp").forward(request, response);
             return;
         }
