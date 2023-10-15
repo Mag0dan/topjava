@@ -21,6 +21,38 @@
     <h3><a href="index.html">Home</a></h3>
     <hr/>
     <h2>Meals</h2>
+    <div>
+        <div>
+            <form method="get" action="meals">
+                <div>
+                    <input type="hidden" name="action" value="filter"/>
+                    <div>
+                        <label for="startDate">От даты (включая)</label>
+                        <input type="date" name="startDate" id="startDate" autocomplete="off"
+                               value="<%= request.getParameter("startDate")%>">
+                    </div>
+                    <div>
+                        <label for="endDate">До даты (включая)</label>
+                        <input type="date" name="endDate" id="endDate" autocomplete="off"
+                               value="<%= request.getParameter("endDate")%>">
+                    </div>
+                    <div>
+                        <label for="startTime">От времени (включая)</label>
+                        <input type="time" name="startTime" id="startTime" autocomplete="off"
+                               value="<%= request.getParameter("startTime")%>">
+                    </div>
+                    <div>
+                        <label for="endTime">До времени (исключая)</label>
+                        <input type="time" name="endTime" id="endTime" autocomplete="off"
+                               value="<%= request.getParameter("endTime")%>">
+                    </div>
+                </div>
+                <div>
+                    <button type="submit">Отфильтровать</button>
+                </div>
+            </form>
+        </div>
+    </div>
     <a href="meals?action=create">Add Meal</a>
     <br><br>
     <table border="1" cellpadding="8" cellspacing="0">
@@ -34,7 +66,7 @@
         </tr>
         </thead>
         <c:forEach items="${requestScope.meals}" var="meal">
-            <jsp:useBean id="meal" type="ru.javawebinar.topjava.model.MealTo"/>
+            <jsp:useBean id="meal" type="ru.javawebinar.topjava.to.MealTo"/>
             <tr class="${meal.excess ? 'excess' : 'normal'}">
                 <td>
                         <%--${meal.dateTime.toLocalDate()} ${meal.dateTime.toLocalTime()}--%>
