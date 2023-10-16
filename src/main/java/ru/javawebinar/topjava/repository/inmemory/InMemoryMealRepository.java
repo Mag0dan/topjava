@@ -25,7 +25,10 @@ public class InMemoryMealRepository implements MealRepository {
     private final AtomicInteger counter = new AtomicInteger(0);
 
     {
-        MealsUtil.meals.forEach(meal -> this.save(meal, meal.getUserId()));
+        int i = 0;
+        for (Meal meal : MealsUtil.meals) {
+            this.save(meal, i++ < MealsUtil.meals.size() / 2 ? 1 : 2);
+        }
     }
 
     @Override
@@ -74,8 +77,11 @@ public class InMemoryMealRepository implements MealRepository {
     }
 
     private List<Meal> getAllFilteredByPredicate(int userId, Predicate<Meal> filter) {
-        return repository
-                .get(userId)
+        Map<Integer, Meal> userRepository = repository.get(userId);
+        if (userRepository == null) {
+            return Collections.emptyList();
+        }
+        return userRepository
                 .values()
                 .stream()
                 .filter(filter)
