@@ -64,7 +64,7 @@ public class MealServlet extends HttpServlet {
             case "create":
             case "update":
                 final Meal meal = "create".equals(action) ?
-                        new Meal(LocalDateTime.now().truncatedTo(ChronoUnit.MINUTES), "", 1000, SecurityUtil.authUserId()) :
+                        new Meal(LocalDateTime.now().truncatedTo(ChronoUnit.MINUTES), "", 1000) :
                         controller.get(getId(request));
                 request.setAttribute("meal", meal);
                 request.getRequestDispatcher("/mealForm.jsp").forward(request, response);
@@ -76,10 +76,10 @@ public class MealServlet extends HttpServlet {
                 String paramStartTime = request.getParameter("startTime");
                 String paramEndTime = request.getParameter("endTime");
 
-                LocalDateTime startDate = paramStartDate.isEmpty() ? LocalDateTime.MIN : LocalDate.parse(paramStartDate).atTime(LocalTime.MIN);
-                LocalDateTime endDate = paramEndDate.isEmpty() ? LocalDateTime.MAX : LocalDate.parse(paramEndDate).atTime(LocalTime.MAX);
-                LocalTime startTime = paramStartTime.isEmpty() ? LocalTime.MIN : LocalTime.parse(paramStartTime);
-                LocalTime endTime = paramEndTime.isEmpty() ? LocalTime.MAX : LocalTime.parse(paramEndTime);
+                LocalDateTime startDate = paramStartDate.isEmpty() ? null : LocalDate.parse(paramStartDate).atTime(LocalTime.MIN);
+                LocalDateTime endDate = paramEndDate.isEmpty() ? null : LocalDate.parse(paramEndDate).atTime(LocalTime.MAX);
+                LocalTime startTime = paramStartTime.isEmpty() ? null : LocalTime.parse(paramStartTime);
+                LocalTime endTime = paramEndTime.isEmpty() ? null : LocalTime.parse(paramEndTime);
 
                 request.setAttribute("meals", controller.getAllFiltered(startDate, endDate, startTime, endTime));
                 request.getRequestDispatcher("/meals.jsp").forward(request, response);
