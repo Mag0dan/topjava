@@ -25,10 +25,8 @@ public class InMemoryMealRepository implements MealRepository {
     private final AtomicInteger counter = new AtomicInteger(0);
 
     {
-        int i = 0;
-        for (Meal meal : MealsUtil.meals) {
-            this.save(meal, i++ < MealsUtil.meals.size() / 2 ? 1 : 2);
-        }
+        MealsUtil.userMeals.forEach(meal -> this.save(meal, 1));
+        MealsUtil.adminMeals.forEach(meal -> this.save(meal, 2));
     }
 
     @Override
@@ -73,7 +71,7 @@ public class InMemoryMealRepository implements MealRepository {
     @Override
     public List<Meal> getAllFiltered(LocalDateTime startDate, LocalDateTime endDate, int userId) {
         log.info("getAllFiltered {} {} {}", startDate, endDate, userId);
-        return getAllFilteredByPredicate(userId, meal -> DateTimeUtil.isBetweenDateTime(meal.getDateTime(), startDate, endDate));
+        return getAllFilteredByPredicate(userId, meal -> DateTimeUtil.isBetweenInclusive(meal.getDateTime(), startDate, endDate));
     }
 
     private List<Meal> getAllFilteredByPredicate(int userId, Predicate<Meal> filter) {

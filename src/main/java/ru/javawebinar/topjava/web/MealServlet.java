@@ -75,8 +75,8 @@ public class MealServlet extends HttpServlet {
                 String paramStartTime = request.getParameter("startTime");
                 String paramEndTime = request.getParameter("endTime");
 
-                LocalDateTime startDate = paramStartDate.isEmpty() ? null : LocalDate.parse(paramStartDate).atTime(LocalTime.MIN);
-                LocalDateTime endDate = paramEndDate.isEmpty() ? null : LocalDate.parse(paramEndDate).atTime(LocalTime.MAX);
+                LocalDate startDate = paramStartDate.isEmpty() ? null : LocalDate.parse(paramStartDate);
+                LocalDate endDate = paramEndDate.isEmpty() ? null : LocalDate.parse(paramEndDate);
                 LocalTime startTime = paramStartTime.isEmpty() ? null : LocalTime.parse(paramStartTime);
                 LocalTime endTime = paramEndTime.isEmpty() ? null : LocalTime.parse(paramEndTime);
 
