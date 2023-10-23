@@ -31,7 +31,6 @@ public class InMemoryMealRepository implements MealRepository {
         Arrays.asList(adminMeal_1, adminMeal_2, adminMeal_3, adminMeal_4, adminMeal_5, adminMeal_6, adminMeal_7).forEach(meal -> save(meal, ADMIN_ID));
     }
 
-
     @Override
     public Meal save(Meal meal, int userId) {
         InMemoryBaseRepository<Meal> meals = usersMealsMap.computeIfAbsent(userId, uId -> new InMemoryBaseRepository<>());
