@@ -50,7 +50,7 @@ public class MealServiceTest extends TestCase {
 
     @Test
     public void getNotExist() {
-        assertThrows(NotFoundException.class, () -> service.get(notExistId, USER_ID));
+        assertThrows(NotFoundException.class, () -> service.get(NOT_EXIST_ID, USER_ID));
     }
 
     @Test
@@ -67,7 +67,7 @@ public class MealServiceTest extends TestCase {
 
     @Test
     public void deleteNotExist() {
-        assertThrows(NotFoundException.class, () -> service.delete(notExistId, USER_ID));
+        assertThrows(NotFoundException.class, () -> service.delete(NOT_EXIST_ID, USER_ID));
     }
 
     @Test
@@ -118,7 +118,7 @@ public class MealServiceTest extends TestCase {
     @Test
     public void updateNotExist() {
         Meal updated = getNew();
-        updated.setId(notExistId);
+        updated.setId(NOT_EXIST_ID);
         assertThrows(NotFoundException.class, () -> service.update(updated, USER_ID));
     }
 

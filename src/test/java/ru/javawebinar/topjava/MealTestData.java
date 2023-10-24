@@ -10,7 +10,7 @@ import static ru.javawebinar.topjava.model.AbstractBaseEntity.START_SEQ;
 
 public class MealTestData {
 
-    public static final int notExistId = Integer.MAX_VALUE;
+    public static final int NOT_EXIST_ID = Integer.MAX_VALUE;
 
     public static final Meal userMeal1 = new Meal(START_SEQ + 9, LocalDateTime.of(2020, Month.JANUARY, 31, 20, 0), "Ужин", 410);
     public static final Meal userMeal2 = new Meal(START_SEQ + 8, LocalDateTime.of(2020, Month.JANUARY, 31, 13, 0), "Обед", 500);
