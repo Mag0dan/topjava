@@ -44,47 +44,47 @@ public class MealServiceTest extends TestCase {
 
     @Test
     public void get() {
-        Meal meal = service.get(userMeal_1.getId(), USER_ID);
-        assertMatch(meal, userMeal_1);
+        Meal meal = service.get(userMeal1.getId(), USER_ID);
+        assertMatch(meal, userMeal1);
     }
 
     @Test
     public void getNotExist() {
-        assertThrows(NotFoundException.class, () -> service.get(1, USER_ID));
+        assertThrows(NotFoundException.class, () -> service.get(notExistId, USER_ID));
     }
 
     @Test
     public void getByWrongUser() {
-        assertThrows(NotFoundException.class, () -> service.get(userMeal_1.getId(), ADMIN_ID));
+        assertThrows(NotFoundException.class, () -> service.get(userMeal1.getId(), ADMIN_ID));
     }
 
     @Test
     public void delete() {
-        Meal meal = userMeal_1;
+        Meal meal = userMeal1;
         service.delete(meal.getId(), USER_ID);
         assertThrows(NotFoundException.class, () -> service.get(meal.getId(), USER_ID));
     }
 
     @Test
     public void deleteNotExist() {
-        assertThrows(NotFoundException.class, () -> service.delete(1, USER_ID));
+        assertThrows(NotFoundException.class, () -> service.delete(notExistId, USER_ID));
     }
 
     @Test
     public void deleteByWrongUser() {
-        assertThrows(NotFoundException.class, () -> service.delete(userMeal_1.getId(), ADMIN_ID));
+        assertThrows(NotFoundException.class, () -> service.delete(userMeal1.getId(), ADMIN_ID));
     }
 
     @Test
     public void getBetweenInclusiveAllRecords() {
-        List<Meal> allUserMeals = Arrays.asList(userMeal_1, userMeal_2, userMeal_3, userMeal_4, userMeal_5, userMeal_6, userMeal_7);
+        List<Meal> allUserMeals = Arrays.asList(userMeal1, userMeal2, userMeal3, userMeal4, userMeal5, userMeal6, userMeal7);
         List<Meal> all = service.getBetweenInclusive(null, null, USER_ID);
         assertMatch(all, allUserMeals);
     }
 
     @Test
     public void getBetweenInclusivePartRecords() {
-        List<Meal> filteredUserMeals = Arrays.asList(userMeal_1, userMeal_2, userMeal_3, userMeal_4);
+        List<Meal> filteredUserMeals = Arrays.asList(userMeal1, userMeal2, userMeal3, userMeal4);
         List<Meal> all = service.getBetweenInclusive(LocalDate.of(2020, Month.JANUARY, 31), LocalDate.of(2020, Month.JANUARY, 31), USER_ID);
         assertMatch(all, filteredUserMeals);
     }
@@ -97,7 +97,7 @@ public class MealServiceTest extends TestCase {
 
     @Test
     public void getAll() {
-        List<Meal> userMeals = Arrays.asList(userMeal_1, userMeal_2, userMeal_3, userMeal_4, userMeal_5, userMeal_6, userMeal_7);
+        List<Meal> userMeals = Arrays.asList(userMeal1, userMeal2, userMeal3, userMeal4, userMeal5, userMeal6, userMeal7);
         List<Meal> all = service.getAll(USER_ID);
         assertMatch(all, userMeals);
     }
@@ -118,7 +118,7 @@ public class MealServiceTest extends TestCase {
     @Test
     public void updateNotExist() {
         Meal updated = getNew();
-        updated.setId(1);
+        updated.setId(notExistId);
         assertThrows(NotFoundException.class, () -> service.update(updated, USER_ID));
     }
 
@@ -140,6 +140,6 @@ public class MealServiceTest extends TestCase {
     @Test
     public void duplicateDateTimeCreate() {
         assertThrows(DataAccessException.class,
-                () -> service.create(new Meal(null, userMeal_1.getDateTime(), "Ужин добавка", 999), USER_ID));
+                () -> service.create(new Meal(null, userMeal1.getDateTime(), "Ужин добавка", 999), USER_ID));
     }
 }

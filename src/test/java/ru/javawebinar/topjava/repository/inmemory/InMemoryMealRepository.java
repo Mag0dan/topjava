@@ -27,8 +27,8 @@ public class InMemoryMealRepository implements MealRepository {
     private final Map<Integer, InMemoryBaseRepository<Meal>> usersMealsMap = new ConcurrentHashMap<>();
 
     {
-        Arrays.asList(userMeal_1, userMeal_2, userMeal_3, userMeal_4, userMeal_5, userMeal_6, userMeal_7).forEach(meal -> save(meal, USER_ID));
-        Arrays.asList(adminMeal_1, adminMeal_2, adminMeal_3, adminMeal_4, adminMeal_5, adminMeal_6, adminMeal_7).forEach(meal -> save(meal, ADMIN_ID));
+        Arrays.asList(userMeal1, userMeal2, userMeal3, userMeal4, userMeal5, userMeal6, userMeal7).forEach(meal -> save(meal, USER_ID));
+        Arrays.asList(adminMeal1, adminMeal2, adminMeal3, adminMeal4, adminMeal5, adminMeal6, adminMeal7).forEach(meal -> save(meal, ADMIN_ID));
     }
 
     @Override
