@@ -52,10 +52,7 @@ public class MealServiceTest {
         protected void finished(long nanos, Description description) {
             long millis = TimeUnit.NANOSECONDS.toMillis(nanos);
             log.info("Time spend: {} ms", millis);
-            results.append(description.getMethodName());
-            results.append("\t");
-            results.append(millis);
-            results.append(" ms");
+            results.append(String.format("%-30s %7d ms", description.getMethodName(), millis));
             results.append("\n");
         }
     };
