@@ -8,12 +8,14 @@ import org.springframework.stereotype.Repository;
 
 import java.time.LocalDateTime;
 
+import static ru.javawebinar.topjava.Profiles.POSTGRES_DB;
+
 @Repository
-@Profile("!hsqldb")
-public class JdbcMealRepository extends BaseJdbcMealRepository {
+@Profile(POSTGRES_DB)
+public class PostgresJdbcMealRepository extends BaseJdbcMealRepository<LocalDateTime> {
 
     @Autowired
-    public JdbcMealRepository(JdbcTemplate jdbcTemplate, NamedParameterJdbcTemplate namedParameterJdbcTemplate) {
+    public PostgresJdbcMealRepository(JdbcTemplate jdbcTemplate, NamedParameterJdbcTemplate namedParameterJdbcTemplate) {
         super(jdbcTemplate, namedParameterJdbcTemplate);
     }
 

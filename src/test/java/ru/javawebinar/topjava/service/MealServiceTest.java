@@ -14,7 +14,7 @@ import static ru.javawebinar.topjava.MealTestData.*;
 import static ru.javawebinar.topjava.UserTestData.ADMIN_ID;
 import static ru.javawebinar.topjava.UserTestData.USER_ID;
 
-abstract public class MealServiceTest extends BaseServiceTest {
+public abstract class MealServiceTest extends BaseServiceTest {
 
     @Autowired
     protected MealService service;

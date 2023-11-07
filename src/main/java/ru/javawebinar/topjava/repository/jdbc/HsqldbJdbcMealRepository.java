@@ -6,14 +6,14 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.stereotype.Repository;
 
+import java.sql.Timestamp;
 import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
+
+import static ru.javawebinar.topjava.Profiles.HSQL_DB;
 
 @Repository
-@Profile("hsqldb")
-public class HsqldbJdbcMealRepository extends BaseJdbcMealRepository {
-
-    private static final DateTimeFormatter DATE_TIME_FORMATTER = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+@Profile(HSQL_DB)
+public class HsqldbJdbcMealRepository extends BaseJdbcMealRepository<Timestamp> {
 
     @Autowired
     public HsqldbJdbcMealRepository(JdbcTemplate jdbcTemplate, NamedParameterJdbcTemplate namedParameterJdbcTemplate) {
@@ -21,7 +21,7 @@ public class HsqldbJdbcMealRepository extends BaseJdbcMealRepository {
     }
 
     @Override
-    protected String getDateTimeDBFormat(LocalDateTime localDateTime) {
-        return DATE_TIME_FORMATTER.format(localDateTime);
+    protected Timestamp getDateTimeDBFormat(LocalDateTime localDateTime) {
+        return Timestamp.valueOf(localDateTime);
     }
 }

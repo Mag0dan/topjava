@@ -1,6 +1,5 @@
 package ru.javawebinar.topjava.repository.jdbc;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.support.DataAccessUtils;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -8,15 +7,13 @@ import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.jdbc.core.simple.SimpleJdbcInsert;
-import org.springframework.stereotype.Repository;
 import ru.javawebinar.topjava.model.Meal;
 import ru.javawebinar.topjava.repository.MealRepository;
 
 import java.time.LocalDateTime;
 import java.util.List;
 
-@Repository
-abstract public class BaseJdbcMealRepository implements MealRepository {
+public abstract class BaseJdbcMealRepository<T> implements MealRepository {
 
     private static final RowMapper<Meal> ROW_MAPPER = BeanPropertyRowMapper.newInstance(Meal.class);
 
@@ -26,7 +23,6 @@ abstract public class BaseJdbcMealRepository implements MealRepository {
 
     private final SimpleJdbcInsert insertMeal;
 
-    @Autowired
     public BaseJdbcMealRepository(JdbcTemplate jdbcTemplate, NamedParameterJdbcTemplate namedParameterJdbcTemplate) {
         this.insertMeal = new SimpleJdbcInsert(jdbcTemplate)
                 .withTableName("meal")
@@ -49,10 +45,11 @@ abstract public class BaseJdbcMealRepository implements MealRepository {
             Number newId = insertMeal.executeAndReturnKey(map);
             meal.setId(newId.intValue());
         } else {
-            if (namedParameterJdbcTemplate.update("" +
-                    "UPDATE meal " +
-                    "   SET description=:description, calories=:calories, date_time=:date_time " +
-                    " WHERE id=:id AND user_id=:user_id", map) == 0) {
+            if (namedParameterJdbcTemplate.update("""
+                    UPDATE meal
+                    SET description=:description, calories=:calories, date_time=:date_time
+                    WHERE id=:id AND user_id=:user_id
+                    """, map) == 0) {
                 return null;
             }
         }
@@ -84,5 +81,5 @@ abstract public class BaseJdbcMealRepository implements MealRepository {
                 ROW_MAPPER, userId, getDateTimeDBFormat(startDateTime), getDateTimeDBFormat(endDateTime));
     }
 
-    protected abstract <T> T getDateTimeDBFormat(LocalDateTime localDateTime);
+    protected abstract T getDateTimeDBFormat(LocalDateTime localDateTime);
 }

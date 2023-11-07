@@ -2,6 +2,7 @@ package ru.javawebinar.topjava.repository.datajpa;
 
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 import ru.javawebinar.topjava.model.Meal;
 import ru.javawebinar.topjava.model.User;
 import ru.javawebinar.topjava.repository.MealRepository;
@@ -10,58 +11,53 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 @Repository
+@Transactional
 public class DataJpaMealRepository implements MealRepository {
     private static final Sort SORT_DATE_TIME = Sort.by(Sort.Direction.DESC, "dateTime");
 
-    private final CrudMealRepository crudRepository;
+    private final CrudMealRepository crudMealRepository;
 
-    public DataJpaMealRepository(CrudMealRepository crudRepository) {
-        this.crudRepository = crudRepository;
+    private final CrudUserRepository crudUserRepository;
+
+    public DataJpaMealRepository(CrudMealRepository crudMealRepository, CrudUserRepository crudUserRepository) {
+        this.crudMealRepository = crudMealRepository;
+        this.crudUserRepository = crudUserRepository;
     }
 
     @Override
     public Meal save(Meal meal, int userId) {
-        User user = getUserById(userId);
-        meal.setUser(user);
-        if (meal.isNew()) {
-            return crudRepository.save(meal);
+        User user = crudUserRepository.getReferenceById(userId);
+        if (meal.isNew() || get(meal.id(), userId) != null) {
+            meal.setUser(user);
+            return crudMealRepository.save(meal);
         }
-        return get(meal.id(), userId) == null ? null : crudRepository.save(meal);
-
+        return null;
     }
 
     @Override
     public boolean delete(int id, int userId) {
-        Meal meal = get(id, userId);
-        return meal != null && crudRepository.delete(id) != 0;
+        return crudMealRepository.delete(id, userId) != 0;
     }
 
     @Override
     public Meal get(int id, int userId) {
-        User user = getUserById(userId);
-        return crudRepository.findByIdAndUser(id, user).orElse(null);
+        User user = crudUserRepository.getReferenceById(userId);
+        return crudMealRepository.findByIdAndUser(id, user);
     }
 
     @Override
     public List<Meal> getAll(int userId) {
-        User user = getUserById(userId);
-        return crudRepository.findAllByUser(user, SORT_DATE_TIME);
+        User user = crudUserRepository.getReferenceById(userId);
+        return crudMealRepository.findAllByUser(user, SORT_DATE_TIME);
     }
 
     @Override
     public List<Meal> getBetweenHalfOpen(LocalDateTime startDateTime, LocalDateTime endDateTime, int userId) {
-        User user = getUserById(userId);
-        return crudRepository.findAllByUserAndDateTimeGreaterThanEqualAndDateTimeLessThan(user, startDateTime, endDateTime, SORT_DATE_TIME);
+        return crudMealRepository.getBetweenHalfOpen(userId, startDateTime, endDateTime, SORT_DATE_TIME);
     }
 
     @Override
     public Meal getWithUser(int id, int userId) {
-        return crudRepository.getWithUser(id, userId).orElse(null);
-    }
-
-    private User getUserById(int userId) {
-        User user = new User();
-        user.setId(userId);
-        return user;
+        return crudMealRepository.getWithUser(id, userId);
     }
 }

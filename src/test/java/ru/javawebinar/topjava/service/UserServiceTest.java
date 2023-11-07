@@ -15,13 +15,13 @@ import java.util.List;
 import static org.junit.Assert.assertThrows;
 import static ru.javawebinar.topjava.UserTestData.*;
 
-abstract public class UserServiceTest extends BaseServiceTest {
+public abstract class UserServiceTest extends BaseServiceTest {
 
     @Autowired
     protected UserService service;
 
     @Autowired
-    protected CacheManager cacheManager;
+    private CacheManager cacheManager;
 
     @Before
     public void setup() {
