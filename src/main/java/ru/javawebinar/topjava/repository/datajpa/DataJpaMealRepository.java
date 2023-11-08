@@ -35,23 +35,18 @@ public class DataJpaMealRepository implements MealRepository {
     }
 
     @Override
-    @Transactional
     public boolean delete(int id, int userId) {
         return crudMealRepository.delete(id, userId) != 0;
     }
 
     @Override
-    @Transactional(readOnly = true)
     public Meal get(int id, int userId) {
-        User user = crudUserRepository.getReferenceById(userId);
-        return crudMealRepository.findByIdAndUser(id, user);
+        return crudMealRepository.findByIdAndUserId(id, userId);
     }
 
     @Override
-    @Transactional(readOnly = true)
     public List<Meal> getAll(int userId) {
-        User user = crudUserRepository.getReferenceById(userId);
-        return crudMealRepository.findAllByUser(user, SORT_DATE_TIME);
+        return crudMealRepository.findAllByUserId(userId, SORT_DATE_TIME);
     }
 
     @Override
