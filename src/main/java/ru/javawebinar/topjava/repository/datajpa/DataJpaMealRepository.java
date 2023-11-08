@@ -11,7 +11,6 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 @Repository
-@Transactional
 public class DataJpaMealRepository implements MealRepository {
     private static final Sort SORT_DATE_TIME = Sort.by(Sort.Direction.DESC, "dateTime");
 
@@ -25,6 +24,7 @@ public class DataJpaMealRepository implements MealRepository {
     }
 
     @Override
+    @Transactional
     public Meal save(Meal meal, int userId) {
         User user = crudUserRepository.getReferenceById(userId);
         if (meal.isNew() || get(meal.id(), userId) != null) {
@@ -35,17 +35,20 @@ public class DataJpaMealRepository implements MealRepository {
     }
 
     @Override
+    @Transactional
     public boolean delete(int id, int userId) {
         return crudMealRepository.delete(id, userId) != 0;
     }
 
     @Override
+    @Transactional(readOnly = true)
     public Meal get(int id, int userId) {
         User user = crudUserRepository.getReferenceById(userId);
         return crudMealRepository.findByIdAndUser(id, user);
     }
 
     @Override
+    @Transactional(readOnly = true)
     public List<Meal> getAll(int userId) {
         User user = crudUserRepository.getReferenceById(userId);
         return crudMealRepository.findAllByUser(user, SORT_DATE_TIME);

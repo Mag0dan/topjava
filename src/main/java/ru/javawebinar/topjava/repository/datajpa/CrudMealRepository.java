@@ -12,7 +12,7 @@ import ru.javawebinar.topjava.model.User;
 import java.time.LocalDateTime;
 import java.util.List;
 
-@Transactional
+@Transactional(readOnly = true)
 public interface CrudMealRepository extends JpaRepository<Meal, Integer> {
 
     @Transactional
