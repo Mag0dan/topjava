@@ -5,6 +5,7 @@ import org.springframework.ui.Model;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 import ru.javawebinar.topjava.model.Meal;
 import ru.javawebinar.topjava.service.MealService;
 
@@ -19,13 +20,14 @@ import static ru.javawebinar.topjava.util.DateTimeUtil.parseLocalDate;
 import static ru.javawebinar.topjava.util.DateTimeUtil.parseLocalTime;
 
 @Controller
+@RequestMapping(value = "/meals")
 public class JspMealController extends AbstractMealController {
 
     public JspMealController(MealService service) {
         super(service);
     }
 
-    @GetMapping("/meals")
+    @GetMapping
     public String get(HttpServletRequest request, Model model) {
         log.info("meals");
         LocalDate startDate = parseLocalDate(request.getParameter("startDate"));
@@ -40,7 +42,7 @@ public class JspMealController extends AbstractMealController {
         return "meals";
     }
 
-    @GetMapping("/meals/update")
+    @GetMapping("/update")
     public String update(HttpServletRequest request) {
         int id = getId(request);
         log.info("update meal {}", id);
@@ -48,7 +50,7 @@ public class JspMealController extends AbstractMealController {
         return "mealForm";
     }
 
-    @GetMapping("/meals/create")
+    @GetMapping("/create")
     public String create(HttpServletRequest request) {
         log.info("create meal");
         final Meal meal = new Meal(LocalDateTime.now().truncatedTo(ChronoUnit.MINUTES), "", 1000);
@@ -56,7 +58,7 @@ public class JspMealController extends AbstractMealController {
         return "mealForm";
     }
 
-    @GetMapping("/meals/delete")
+    @GetMapping("/delete")
     public String delete(HttpServletRequest request) {
         int id = getId(request);
         log.info("delete meal {}", id);
@@ -64,7 +66,7 @@ public class JspMealController extends AbstractMealController {
         return "redirect:/meals";
     }
 
-    @PostMapping("/meals")
+    @PostMapping
     public String set(HttpServletRequest request) {
         String reqParamId = request.getParameter("id");
         log.info("postMeal {}", reqParamId);

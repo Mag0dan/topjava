@@ -106,18 +106,20 @@ public class JdbcUserRepository implements UserRepository {
     }
 
     private void saveRoles(User user) {
-        List<Role> roles = new ArrayList<>(user.getRoles());
-        jdbcTemplate.batchUpdate(
-                "INSERT INTO user_role (role, user_id) VALUES (?,?)",
-                new BatchPreparedStatementSetter() {
-                    public void setValues(PreparedStatement ps, int i) throws SQLException {
-                        ps.setString(1, roles.get(i).name());
-                        ps.setInt(2, user.getId());
-                    }
+        if (!user.getRoles().isEmpty()) {
+            List<Role> roles = new ArrayList<>(user.getRoles());
+            jdbcTemplate.batchUpdate(
+                    "INSERT INTO user_role (role, user_id) VALUES (?,?)",
+                    new BatchPreparedStatementSetter() {
+                        public void setValues(PreparedStatement ps, int i) throws SQLException {
+                            ps.setString(1, roles.get(i).name());
+                            ps.setInt(2, user.getId());
+                        }
 
-                    public int getBatchSize() {
-                        return roles.size();
-                    }
-                });
+                        public int getBatchSize() {
+                            return roles.size();
+                        }
+                    });
+        }
     }
 }
