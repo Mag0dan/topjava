@@ -67,7 +67,7 @@ public class JspMealController extends AbstractMealController {
     }
 
     @PostMapping
-    public String set(HttpServletRequest request) {
+    public String save(HttpServletRequest request) {
         String reqParamId = request.getParameter("id");
         log.info("postMeal {}", reqParamId);
         Meal meal = new Meal(
