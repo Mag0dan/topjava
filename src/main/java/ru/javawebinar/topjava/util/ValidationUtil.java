@@ -62,9 +62,9 @@ public class ValidationUtil {
     }
 
     public static <T> void beanEntityValidate(T entity) throws ConstraintViolationException {
-        Set<ConstraintViolation<T>> validate = VALIDATOR.validate(entity);
-        if(!validate.isEmpty()) {
-            throw new ConstraintViolationException(validate);
+        Set<ConstraintViolation<T>> validationResultSet = VALIDATOR.validate(entity);
+        if (!validationResultSet.isEmpty()) {
+            throw new ConstraintViolationException(validationResultSet);
         }
     }
 }

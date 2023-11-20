@@ -5,7 +5,6 @@ import org.springframework.ui.Model;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.servlet.ModelAndView;
 import ru.javawebinar.topjava.model.Meal;
 import ru.javawebinar.topjava.service.MealService;
 
@@ -20,14 +19,14 @@ import static ru.javawebinar.topjava.util.DateTimeUtil.parseLocalDate;
 import static ru.javawebinar.topjava.util.DateTimeUtil.parseLocalTime;
 
 @Controller
-public class JspMealController extends MealController {
+public class JspMealController extends AbstractMealController {
 
     public JspMealController(MealService service) {
         super(service);
     }
 
     @GetMapping("/meals")
-    public String getMeals(HttpServletRequest request, Model model) {
+    public String get(HttpServletRequest request, Model model) {
         log.info("meals");
         LocalDate startDate = parseLocalDate(request.getParameter("startDate"));
         LocalDate endDate = parseLocalDate(request.getParameter("endDate"));
@@ -42,7 +41,7 @@ public class JspMealController extends MealController {
     }
 
     @GetMapping("/meals/update")
-    public String updateMeal(HttpServletRequest request) {
+    public String update(HttpServletRequest request) {
         int id = getId(request);
         log.info("update meal {}", id);
         request.setAttribute("meal", get(id));
@@ -50,7 +49,7 @@ public class JspMealController extends MealController {
     }
 
     @GetMapping("/meals/create")
-    public String createMeal(HttpServletRequest request) {
+    public String create(HttpServletRequest request) {
         log.info("create meal");
         final Meal meal = new Meal(LocalDateTime.now().truncatedTo(ChronoUnit.MINUTES), "", 1000);
         request.setAttribute("meal", meal);
@@ -58,15 +57,15 @@ public class JspMealController extends MealController {
     }
 
     @GetMapping("/meals/delete")
-    public ModelAndView deleteMeal(HttpServletRequest request) {
+    public String delete(HttpServletRequest request) {
         int id = getId(request);
         log.info("delete meal {}", id);
         delete(id);
-        return new ModelAndView("redirect:/meals");
+        return "redirect:/meals";
     }
 
     @PostMapping("/meals")
-    public String setMeal(HttpServletRequest request) {
+    public String set(HttpServletRequest request) {
         String reqParamId = request.getParameter("id");
         log.info("postMeal {}", reqParamId);
         Meal meal = new Meal(
@@ -76,7 +75,6 @@ public class JspMealController extends MealController {
 
         if (StringUtils.hasLength(reqParamId)) {
             int id = getId(request);
-            meal.setId(id);
             update(meal, id);
         } else {
             create(meal);

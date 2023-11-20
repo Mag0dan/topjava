@@ -2,9 +2,7 @@ package ru.javawebinar.topjava.repository.jdbc;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.support.DataAccessUtils;
-import org.springframework.jdbc.core.BatchPreparedStatementSetter;
-import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.jdbc.core.ResultSetExtractor;
+import org.springframework.jdbc.core.*;
 import org.springframework.jdbc.core.namedparam.BeanPropertySqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.jdbc.core.simple.SimpleJdbcInsert;
@@ -24,6 +22,8 @@ import static ru.javawebinar.topjava.util.ValidationUtil.beanEntityValidate;
 @Transactional(readOnly = true)
 public class JdbcUserRepository implements UserRepository {
 
+    private static final RowMapper<User> ROW_MAPPER = BeanPropertyRowMapper.newInstance(User.class);
+
     private final JdbcTemplate jdbcTemplate;
 
     private final NamedParameterJdbcTemplate namedParameterJdbcTemplate;
@@ -31,30 +31,23 @@ public class JdbcUserRepository implements UserRepository {
     private final SimpleJdbcInsert insertUser;
 
     private final ResultSetExtractor<List<User>> resultSetExtractor = rs -> {
-        Map<Integer, User> map = new LinkedHashMap<>();
+        Map<Integer, User> processedIdUsersMap = new LinkedHashMap<>();
         while (rs.next()) {
             int id = rs.getInt("id");
-            User user = map.get(id);
+            User user = processedIdUsersMap.get(id);
             if (user == null) {
-                user = new User();
-                user.setId(rs.getInt("id"));
-                user.setName(rs.getString("name"));
-                user.setEmail(rs.getString("email"));
-                user.setPassword(rs.getString("password"));
-                user.setRegistered(rs.getDate("registered"));
-                user.setEnabled(rs.getBoolean("enabled"));
-                user.setCaloriesPerDay(rs.getInt("calories_per_day"));
+                user = ROW_MAPPER.mapRow(rs, 0);
                 if (rs.getString("role") != null) {
-                    user.setRoles(Set.of(Role.valueOf(rs.getString("role"))));
+                    user.setRoles(EnumSet.of(Role.valueOf(rs.getString("role"))));
                 } else {
-                    user.setRoles(Set.of());
+                    user.setRoles(EnumSet.noneOf(Role.class));
                 }
-                map.put(id, user);
+                processedIdUsersMap.put(id, user);
             } else {
                 user.getRoles().add(Role.valueOf(rs.getString("role")));
             }
         }
-        return new ArrayList<>(map.values());
+        return new ArrayList<>(processedIdUsersMap.values());
     };
 
     @Autowired
@@ -113,17 +106,17 @@ public class JdbcUserRepository implements UserRepository {
     }
 
     private void saveRoles(User user) {
-        List<Role> roles = user.getRoles().stream().toList();
+        List<Role> roles = new ArrayList<>(user.getRoles());
         jdbcTemplate.batchUpdate(
-                "insert into user_role (role, user_id) values(?,?)",
+                "INSERT INTO user_role (role, user_id) VALUES (?,?)",
                 new BatchPreparedStatementSetter() {
                     public void setValues(PreparedStatement ps, int i) throws SQLException {
-                        ps.setString(1, roles.get(i).toString());
+                        ps.setString(1, roles.get(i).name());
                         ps.setInt(2, user.getId());
                     }
 
                     public int getBatchSize() {
-                        return user.getRoles().size();
+                        return roles.size();
                     }
                 });
     }
