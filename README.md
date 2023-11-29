@@ -253,9 +253,15 @@
 -  <a href="http://bookvoed.ru/book?id=2593572">G.L. McDowell: Cracking the Coding Interview</a>
 
 #### Curl запросы  (для Windows)
--  `curl http://localhost:8080/topjava/rest/meals/`
--  `curl http://localhost:8080/topjava/rest/meals/100007`
--  `curl "http://localhost:8080/topjava/rest/meals/filter?startDate=2020-01-30&startTime=13:00&endDate=2020-01-31&endTime=20:00"`
--  `curl -X POST -H "Content-Type: application/json" -d "{\"id\": \"\", \"dateTime\": \"2020-01-31T21:03:00\", \"description\": \"Ужинлала\", \"calories\": \"510\"}" http://localhost:8080/topjava/rest/meals/`
--  `curl -X PUT -H "Content-Type: application/json" -d "{\"id\": \"100008\", \"dateTime\": \"2020-01-31T21:04:00\", \"description\": \"Ужин2\", \"calories\": \"510\"}" http://localhost:8080/topjava/rest/meals/100008`
--  `curl -X DELETE http://localhost:8080/topjava/rest/meals/100009`
+-  Get all meals  
+`curl http://localhost:8080/topjava/rest/meals/`
+- Get meal by Id  
+`curl http://localhost:8080/topjava/rest/meals/100007`
+- Get meals filtered by date and time  
+`curl "http://localhost:8080/topjava/rest/meals/filter?startDate=2020-01-30&startTime=13:00&endDate=2020-01-31&endTime=20:00"`
+- Create new meal  
+`curl -X POST -H "Content-Type: application/json" -d "{\"id\": \"\", \"dateTime\": \"2020-01-31T21:03:00\", \"description\": \"Ужинлала\", \"calories\": \"510\"}" http://localhost:8080/topjava/rest/meals/`
+- Update meal by Id  
+`curl -X PUT -H "Content-Type: application/json" -d "{\"id\": \"100008\", \"dateTime\": \"2020-01-31T21:04:00\", \"description\": \"Ужин2\", \"calories\": \"510\"}" http://localhost:8080/topjava/rest/meals/100008`
+- Delete meal by Id  
+`curl -X DELETE http://localhost:8080/topjava/rest/meals/100009`

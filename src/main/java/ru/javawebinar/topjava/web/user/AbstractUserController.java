@@ -49,8 +49,8 @@ public abstract class AbstractUserController {
         return service.getByEmail(email);
     }
 
-    public User getWithMeal(int id) {
-        log.info("getWithMeal {}", id);
+    public User getWithMeals(int id) {
+        log.info("getWithMeals {}", id);
         return service.getWithMeals(id);
     }
 }
