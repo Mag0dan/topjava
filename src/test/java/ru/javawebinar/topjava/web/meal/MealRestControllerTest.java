@@ -16,7 +16,6 @@ import ru.javawebinar.topjava.web.SecurityUtil;
 import ru.javawebinar.topjava.web.json.JsonUtil;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
@@ -68,7 +67,7 @@ class MealRestControllerTest extends AbstractControllerTest {
 
     @Test
     void getBetween() throws Exception {
-        List<MealTo> mealsToFiltered = mealsTo.stream().filter(mealTo -> mealTo.getId().equals(meal2.getId()) || mealTo.getId().equals(meal6.getId())).collect(Collectors.toList());
+        List<MealTo> mealsToFiltered = List.of(mealTo6, mealTo2);
         perform(MockMvcRequestBuilders.get(REST_URL + "filter")
                 .param("startDate", "2020-01-30")
                 .param("startTime", "13:00")
