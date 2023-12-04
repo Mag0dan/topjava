@@ -1,12 +1,13 @@
-const userAjaxUrl = "admin/users/";
+const mealAjaxUrl = "profile/meals/";
 
 // https://stackoverflow.com/a/5064235/548473
 const ctx = {
-    ajaxUrl: userAjaxUrl,
+    ajaxUrl: mealAjaxUrl,
     updateTable: function () {
         $.ajax({
             type: "GET",
-            url: userAjaxUrl
+            url: mealAjaxUrl + "filter",
+            data: $("#filter").serialize()
         }).done(updateTableByData);
     }
 };
@@ -19,19 +20,13 @@ $(function () {
             "info": true,
             "columns": [
                 {
-                    "data": "name"
+                    "data": "dateTime"
                 },
                 {
-                    "data": "email"
+                    "data": "description"
                 },
                 {
-                    "data": "roles"
-                },
-                {
-                    "data": "enabled"
-                },
-                {
-                    "data": "registered"
+                    "data": "calories"
                 },
                 {
                     "defaultContent": "Edit",
@@ -52,14 +47,18 @@ $(function () {
     );
 });
 
-function setEnable(checkbox) {
-    let id = $(checkbox).closest('tr').attr("id");
+function filterMeals() {
     $.ajax({
-        type: "POST",
-        url: ctx.ajaxUrl + id,
-        data: {'enable': checkbox.checked},
-    }).done(function () {
-        $(checkbox).closest('tr').attr("data-user-enabled", checkbox.checked);
-        successNoty(checkbox.checked ? "Enabled" : "Disabled");
+        type: "GET",
+        url: ctx.ajaxUrl + "filter",
+        data: $('#filter').serialize()
+    }).done(function (data) {
+        updateTableByData(data);
+        successNoty("Filtered");
     });
+}
+
+function clearFilter() {
+    $('#filter')[0].reset();
+    ctx.updateTable();
 }
