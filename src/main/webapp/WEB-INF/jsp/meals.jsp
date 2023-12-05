@@ -15,19 +15,19 @@
             <form id="filter">
                 <dl>
                     <dt><spring:message code="meal.startDate"/>:</dt>
-                    <dd><input type="date" name="startDate" value="${param.startDate}"></dd>
+                    <dd><input type="date" name="startDate"></dd>
                 </dl>
                 <dl>
                     <dt><spring:message code="meal.endDate"/>:</dt>
-                    <dd><input type="date" name="endDate" value="${param.endDate}"></dd>
+                    <dd><input type="date" name="endDate"></dd>
                 </dl>
                 <dl>
                     <dt><spring:message code="meal.startTime"/>:</dt>
-                    <dd><input type="time" name="startTime" value="${param.startTime}"></dd>
+                    <dd><input type="time" name="startTime"></dd>
                 </dl>
                 <dl>
                     <dt><spring:message code="meal.endTime"/>:</dt>
-                    <dd><input type="time" name="endTime" value="${param.endTime}"></dd>
+                    <dd><input type="time" name="endTime"></dd>
                 </dl>
                 <button type="button" onclick="ctx.updateTable()"><spring:message code="meal.filter"/></button>
                 <button type="button" onclick="clearFilter()"><spring:message code="meal.reset"/></button>
@@ -48,7 +48,7 @@
                 </thead>
                 <c:forEach items="${requestScope.meals}" var="meal">
                     <jsp:useBean id="meal" type="ru.javawebinar.topjava.to.MealTo"/>
-                    <tr id="${meal.id}">
+                    <tr id="${meal.id}" data-meal-excess="${meal.excess}">
                         <td>${fn:formatDateTime(meal.dateTime)}</td>
                         <td>${meal.description}</td>
                         <td>${meal.calories}</td>
