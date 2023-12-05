@@ -61,5 +61,7 @@ function setEnable(checkbox) {
     }).done(function () {
         $(checkbox).closest('tr').attr("data-user-enabled", checkbox.checked);
         successNoty(checkbox.checked ? "Enabled" : "Disabled");
+    }).fail(function () {
+        $(checkbox).prop("checked", !checkbox.checked);
     });
 }

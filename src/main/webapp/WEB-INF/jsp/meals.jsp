@@ -29,7 +29,7 @@
                     <dt><spring:message code="meal.endTime"/>:</dt>
                     <dd><input type="time" name="endTime" value="${param.endTime}"></dd>
                 </dl>
-                <button type="button" onclick="filterMeals()"><spring:message code="meal.filter"/></button>
+                <button type="button" onclick="ctx.updateTable()"><spring:message code="meal.filter"/></button>
                 <button type="button" onclick="clearFilter()"><spring:message code="meal.reset"/></button>
             </form>
             <button class="btn btn-primary" onclick="add()">

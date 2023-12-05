@@ -40,23 +40,12 @@ $(function () {
             "order": [
                 [
                     0,
-                    "asc"
+                    "desc"
                 ]
             ]
         })
     );
 });
-
-function filterMeals() {
-    $.ajax({
-        type: "GET",
-        url: ctx.ajaxUrl + "filter",
-        data: $('#filter').serialize()
-    }).done(function (data) {
-        updateTableByData(data);
-        successNoty("Filtered");
-    });
-}
 
 function clearFilter() {
     $('#filter')[0].reset();
